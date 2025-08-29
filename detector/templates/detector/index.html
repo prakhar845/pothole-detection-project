@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pothole Detection Dashboard (Django)</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
+        header { width: 100%; background-color: #343a40; color: white; padding: 1rem 0; text-align: center; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+        h1 { margin: 0; font-size: 2rem; }
+        .dashboard-container { display: flex; gap: 2rem; margin-top: 2rem; width: 95%; max-width: 1200px; align-items: flex-start; }
+        .video-container { flex-grow: 1; border: 5px solid #fff; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); border-radius: 8px; overflow: hidden; }
+        img { max-width: 100%; height: auto; display: block; }
+        .stats-container { width: 250px; flex-shrink: 0; background-color: #fff; border-radius: 8px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); padding: 1.5rem; }
+        .stat-card { text-align: center; }
+        .stat-label { font-size: 1rem; color: #6c757d; }
+        .stat-value { font-size: 4rem; font-weight: bold; color: #343a40; line-height: 1; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Real-Time Pothole Detection</h1>
+    </header>
+    <div class="dashboard-container">
+        <div class="video-container">
+            <img id="video-stream" alt="Pothole Detection Feed">
+        </div>
+        <div class="stats-container">
+            <div class="stat-card">
+                <span class="stat-label">Potholes Detected</span>
+                <span id="pothole-count" class="stat-value">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const potholeCountElement = document.getElementById('pothole-count');
+        const videoStreamElement = document.getElementById('video-stream');
+
+        // Note the new WebSocket URL from your routing.py
+        const potholeSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/pothole_updates/'
+        );
+
+        potholeSocket.onopen = function(e) {
+            console.log("WebSocket connection established!");
+        };
+
+        potholeSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            
+            // Update the pothole count
+            potholeCountElement.innerText = data.pothole_count;
+            
+            // Update the image source with the new base64 frame data
+            videoStreamElement.src = 'data:image/jpeg;base64,' + data.image;
+        };
+
+        potholeSocket.onclose = function(e) {
+            console.error('Pothole socket closed unexpectedly. Check server logs.');
+        };
+
+        potholeSocket.onerror = function(err) {
+            console.error('Socket encountered error: ', err.message, 'Closing socket');
+            potholeSocket.close();
+        };
+    </script>
+</body>
+</html>
