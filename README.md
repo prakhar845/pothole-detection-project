@@ -25,6 +25,7 @@ Real-Time Detection: Employs a YOLOv8 model to identify potholes in live or pre-
 
 ## Getting Started
 There are two methods to run this application. The recommended approach is using Docker, as it handles all dependencies and services automatically.
+
 **Important Note:** This repository does not include the sample video file due to its size. Please [download it here](https://drive.google.com/file/d/1c_Tsnwv1DMn6wlbiJbeMGEpdf1tgtleu/view?usp=sharing) and place it inside the `detector/` folder before running the application.
 
 **Method 1:** Run with Docker (Recommended)
