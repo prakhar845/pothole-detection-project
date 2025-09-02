@@ -33,6 +33,27 @@ Prerequisites:
 
 Docker Desktop installed and running.
 
+**Now install redis from docker hub:**
+
+   1. **Pull the latest Redis Docker Image:**
+
+        docker pull redis:latest
+
+      This downloads the official Redis Image from Docker Hub
+    
+    2. **Run the Redis container:**
+    
+        docker run -d --name redis -p
+       6379:6379 redis:latest
+
+      This launches Redis in detached mode, maps port 6379, and names the container redis
+
+**Verify Installation:**
+
+docker ps 
+
+The active Redis container should be listed
+
 (For Windows) WSL 2 installed and configured.
 
 **Instructions:**
@@ -41,6 +62,8 @@ Docker Desktop installed and running.
 
 git clone https://github.com/prakhar845/pothole-detection-project.git
 cd pothole-detection-project
+
+**PS:** Go to settings.py under pothole_project_django and change the hosts name from 127.0.0.1 to redis
 
 **Build and Run the Containers**
 This command will build the necessary Docker images and start the application in the background.
@@ -70,10 +93,14 @@ Create and Activate a Virtual Environment
 # For Windows
 python -m venv venv
 .\venv\Scripts\activate
+cd pothole_project_django
 
 # For macOS / Linux
 python3 -m venv venv
 source venv/bin/activate
+cd pothole_project_django
+
+**PS:** Go to settings.py under pothole_project_django and change the hosts name from redis to 127.0.0.1
 
 **Install Dependencies**
 
@@ -87,7 +114,7 @@ sudo service redis-server start
 **Run the Application**
 From the directory containing manage.py, start the Daphne server:
 
-daphne pothole_project_django.asgi:application
+python -m daphne pothole_project_django.asgi:application
 
 **Access the Application**
 Open your web browser and navigate to: http://127.0.0.1:8000/
