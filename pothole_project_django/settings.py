@@ -9,8 +9,7 @@ SECRET_KEY = 'django-insecure-your-secret-key-goes-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-
+ALLOWED_HOSTS = ['redis', 'localhost', '127.0.0.1']
 # Application definition
 INSTALLED_APPS = [
     'channels',
@@ -75,7 +74,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('redis', 6379)],
+            "hosts": [('redis', 6379)],  # Use 'redis' for docker-compose
         },
     },
 }
